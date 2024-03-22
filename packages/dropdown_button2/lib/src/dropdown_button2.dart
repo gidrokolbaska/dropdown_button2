@@ -205,9 +205,7 @@ class _DropdownMenuItemButtonState<T>
     Widget child = Container(
       padding: (menuItemStyle.padding ?? _kMenuItemPadding)
           .resolve(widget.textDirection),
-      height: menuItemStyle.customHeights == null
-          ? menuItemStyle.height
-          : menuItemStyle.customHeights![widget.itemIndex],
+      height: widget.route.itemHeight,
       child: widget.route.items[widget.itemIndex],
     );
     // An [InkWell] is added to the item only if it is enabled
