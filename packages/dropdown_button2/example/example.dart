@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
     'Item8',
   ];
   final valueListenable = ValueNotifier<String?>(null);
-
+String? selectedValue;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ))
                 .toList(),
+                value: selectedValue;
             valueListenable: valueListenable,
             onChanged: (value) {
               valueListenable.value = value;
