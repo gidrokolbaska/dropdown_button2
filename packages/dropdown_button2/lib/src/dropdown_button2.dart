@@ -1009,6 +1009,9 @@ class DropdownButtonFormField2<T> extends FormField<T> {
                         const InputDecoration.collapsed(hintText: '').copyWith(
                       errorStyle: effectiveDecoration.errorStyle,
                       errorText: field.errorText,
+                      errorBorder: effectiveDecoration.errorBorder,
+                      focusedErrorBorder:
+                          effectiveDecoration.focusedErrorBorder,
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton2<T>._formField(
