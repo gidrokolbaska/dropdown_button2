@@ -1005,8 +1005,11 @@ class DropdownButtonFormField2<T> extends FormField<T> {
               child: Builder(
                 builder: (BuildContext context) {
                   return InputDecorator(
-                    decoration: const InputDecoration.collapsed(hintText: '')
-                        .copyWith(errorText: field.errorText),
+                    decoration: effectiveDecoration.copyWith(
+                      isCollapsed: true,
+                      hintText: '',
+                      errorText: field.errorText,
+                    ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton2<T>._formField(
                         items: items,
@@ -1036,7 +1039,10 @@ class DropdownButtonFormField2<T> extends FormField<T> {
                         barrierColor: barrierColor,
                         barrierLabel: barrierLabel,
                         openDropdownListenable: openDropdownListenable,
-                        inputDecoration: effectiveDecoration,
+                        inputDecoration: effectiveDecoration.copyWith(
+                          enabledBorder: !isEmpty ? null : InputBorder.none,
+                          filled: isEmpty,
+                        ),
                         isEmpty: isEmpty,
                         isFocused: Focus.of(context).hasFocus,
                       ),
