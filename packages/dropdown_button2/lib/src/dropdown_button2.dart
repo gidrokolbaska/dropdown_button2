@@ -1041,7 +1041,7 @@ class DropdownButtonFormField2<T> extends FormField<T> {
                         openDropdownListenable: openDropdownListenable,
                         inputDecoration: effectiveDecoration.copyWith(
                           enabledBorder: !isEmpty ? null : InputBorder.none,
-                          filled: isEmpty,
+                          filled: isEmpty && !state.hasError,
                         ),
                         isEmpty: isEmpty,
                         isFocused: Focus.of(context).hasFocus,
