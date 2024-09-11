@@ -1039,8 +1039,14 @@ class DropdownButtonFormField2<T> extends FormField<T> {
                       openDropdownListenable: openDropdownListenable,
                       inputDecoration: effectiveDecoration.copyWith(
                         errorText: field.errorText,
-                        enabledBorder:
-                            !isEmpty ? null : effectiveDecoration.enabledBorder,
+                        enabledBorder: !isEmpty
+                            ? null
+                            : OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(4),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                ),
+                              ),
                         filled: isEmpty && !state.hasError,
                         errorStyle: effectiveDecoration.errorStyle,
                         errorBorder: effectiveDecoration.errorBorder,
