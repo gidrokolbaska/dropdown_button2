@@ -961,6 +961,7 @@ class DropdownButtonFormField2<T> extends FormField<T> {
     Color? barrierColor,
     String? barrierLabel,
     Listenable? openDropdownListenable,
+    InputBorder? inputBorderForEmptyValue,
   })  : assert(
           valueListenable == null || multiValueListenable == null,
           'Only one of valueListenable or multiValueListenable can be used.',
@@ -1041,12 +1042,7 @@ class DropdownButtonFormField2<T> extends FormField<T> {
                         errorText: field.errorText,
                         enabledBorder: !isEmpty
                             ? null
-                            : OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: const BorderSide(
-                                  width: 0,
-                                ),
-                              ),
+                            : inputBorderForEmptyValue ?? InputBorder.none,
                         filled: isEmpty && !state.hasError,
                         errorStyle: effectiveDecoration.errorStyle,
                         errorBorder: effectiveDecoration.errorBorder,
