@@ -932,14 +932,15 @@ class DropdownButtonFormField2<T> extends FormField<T> {
     required List<DropdownItem<T>>? items,
     DropdownButtonBuilder? selectedItemBuilder,
     ValueListenable<T?>? valueListenable,
-    ValueListenable<List<T>>? multiValueListenable,
     Widget? hint,
+    ValueListenable<List<T>>? multiValueListenable,
     Widget? disabledHint,
     this.onChanged,
     OnMenuStateChangeFn? onMenuStateChange,
     TextStyle? style,
     bool isDense = true,
     bool isExpanded = false,
+    double? itemHeight,
     FocusNode? focusNode,
     bool autofocus = false,
     InputDecoration? decoration,
@@ -964,6 +965,7 @@ class DropdownButtonFormField2<T> extends FormField<T> {
           valueListenable == null || multiValueListenable == null,
           'Only one of valueListenable or multiValueListenable can be used.',
         ),
+        assert(itemHeight == null || itemHeight >= kMinInteractiveDimension),
         decoration = _getInputDecoration(decoration, buttonStyleData),
         super(
           initialValue: valueListenable != null
@@ -996,7 +998,7 @@ class DropdownButtonFormField2<T> extends FormField<T> {
 
             final bool isEmpty =
                 !showSelectedItem && !isHintOrDisabledHintAvailable();
-
+            final bool hasError = effectiveDecoration.errorText != null;
             // An unFocusable Focus widget so that this widget can detect if its
             // descendants have focus or not.
             return Focus(
@@ -1004,51 +1006,74 @@ class DropdownButtonFormField2<T> extends FormField<T> {
               skipTraversal: true,
               child: Builder(
                 builder: (BuildContext context) {
-                  return InputDecorator(
-                    decoration:
-                        const InputDecoration.collapsed(hintText: '').copyWith(
-                      errorStyle: effectiveDecoration.errorStyle,
-                      errorText: field.errorText,
-                      errorBorder: effectiveDecoration.errorBorder,
-                      focusedErrorBorder:
-                          effectiveDecoration.focusedErrorBorder,
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2<T>._formField(
-                        items: items,
-                        selectedItemBuilder: selectedItemBuilder,
-                        valueListenable: valueListenable,
-                        multiValueListenable: multiValueListenable,
-                        hint: hint,
-                        disabledHint: disabledHint,
-                        onChanged: onChanged == null ? null : state.didChange,
-                        onMenuStateChange: onMenuStateChange,
-                        style: style,
-                        isDense: isDense,
-                        isExpanded: isExpanded,
-                        focusNode: focusNode,
-                        autofocus: autofocus,
-                        enableFeedback: enableFeedback,
-                        alignment: alignment,
-                        buttonStyleData: buttonStyleData,
-                        iconStyleData: iconStyleData,
-                        dropdownStyleData: dropdownStyleData,
-                        menuItemStyleData: menuItemStyleData,
-                        dropdownSearchData: dropdownSearchData,
-                        dropdownSeparator: dropdownSeparator,
-                        customButton: customButton,
-                        openWithLongPress: openWithLongPress,
-                        barrierDismissible: barrierDismissible,
-                        barrierColor: barrierColor,
-                        barrierLabel: barrierLabel,
-                        openDropdownListenable: openDropdownListenable,
-                        inputDecoration: effectiveDecoration.copyWith(
-                          enabledBorder: !isEmpty ? null : InputBorder.none,
-                          filled: isEmpty && !state.hasError,
-                        ),
-                        isEmpty: isEmpty,
-                        isFocused: Focus.of(context).hasFocus,
+                  final bool isFocused = Focus.of(context).hasFocus;
+                  InputBorder? resolveInputBorder() {
+                    if (hasError) {
+                      if (isFocused) {
+                        return effectiveDecoration.focusedErrorBorder;
+                      }
+                      return effectiveDecoration.errorBorder;
+                    }
+                    if (isFocused) {
+                      return effectiveDecoration.focusedBorder;
+                    }
+                    if (effectiveDecoration.enabled) {
+                      return effectiveDecoration.enabledBorder;
+                    }
+                    return effectiveDecoration.border;
+                  }
+
+                  BorderRadius? effectiveBorderRadius() {
+                    final InputBorder? inputBorder = resolveInputBorder();
+                    if (inputBorder is OutlineInputBorder) {
+                      return inputBorder.borderRadius;
+                    }
+                    if (inputBorder is UnderlineInputBorder) {
+                      return inputBorder.borderRadius;
+                    }
+                    return null;
+                  }
+
+                  return DropdownButtonHideUnderline(
+                    child: DropdownButton2<T>._formField(
+                      items: items,
+                      selectedItemBuilder: selectedItemBuilder,
+                      valueListenable: valueListenable,
+                      multiValueListenable: multiValueListenable,
+                      hint: hint,
+                      disabledHint: disabledHint,
+                      onChanged: onChanged == null ? null : state.didChange,
+                      onMenuStateChange: onMenuStateChange,
+                      style: style,
+                      isDense: isDense,
+                      isExpanded: isExpanded,
+                      focusNode: focusNode,
+                      autofocus: autofocus,
+                      enableFeedback: enableFeedback,
+                      alignment: alignment,
+                      buttonStyleData: buttonStyleData,
+                      iconStyleData: iconStyleData,
+                      dropdownStyleData: dropdownStyleData,
+                      menuItemStyleData: menuItemStyleData,
+                      dropdownSearchData: dropdownSearchData,
+                      dropdownSeparator: dropdownSeparator,
+                      customButton: customButton,
+                      openWithLongPress: openWithLongPress,
+                      barrierDismissible: barrierDismissible,
+                      barrierColor: barrierColor,
+                      barrierLabel: barrierLabel,
+                      openDropdownListenable: openDropdownListenable,
+                      inputDecoration: effectiveDecoration.copyWith(
+                        errorText: field.errorText,
+                        enabledBorder: !isEmpty ? null : InputBorder.none,
+                        filled: isEmpty && !state.hasError,
+                        errorStyle: effectiveDecoration.errorStyle,
+                        errorBorder: effectiveDecoration.errorBorder,
+                        focusedErrorBorder:
+                            effectiveDecoration.focusedErrorBorder,
                       ),
+                      isEmpty: isEmpty,
+                      isFocused: isFocused,
                     ),
                   );
                 },
