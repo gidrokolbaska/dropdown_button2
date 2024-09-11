@@ -753,7 +753,7 @@ class _DropdownButton2State<T> extends State<DropdownButton2<T>>
               Widget? item = _selectedIndex == null || hintIndex == null
                   ? null
                   : buttonItems[_selectedIndex ?? hintIndex];
-              if (item is DropdownItem) {
+              if (item != null && item is DropdownItem) {
                 item = item.copyWith(alignment: widget.alignment);
               }
 
