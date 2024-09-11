@@ -750,10 +750,8 @@ class _DropdownButton2State<T> extends State<DropdownButton2<T>>
                 widget.valueListenable,
                 widget.multiValueListenable,
               );
-              Widget? item = _selectedIndex == null || hintIndex == null
-                  ? null
-                  : buttonItems[_selectedIndex ?? hintIndex];
-              if (item != null && item is DropdownItem) {
+              Widget item = buttonItems[_selectedIndex ?? hintIndex ?? 0];
+              if (item is DropdownItem) {
                 item = item.copyWith(alignment: widget.alignment);
               }
 
@@ -764,7 +762,9 @@ class _DropdownButton2State<T> extends State<DropdownButton2<T>>
               return buttonHeight != null && _buttonStyle?.width != null
                   ? Align(
                       alignment: widget.alignment,
-                      child: item,
+                      child: _selectedIndex == null || hintIndex == null
+                          ? null
+                          : item,
                     )
                   : IndexedStack(
                       index: _selectedIndex ?? hintIndex,
