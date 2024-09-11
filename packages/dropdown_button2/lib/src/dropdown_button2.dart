@@ -762,9 +762,7 @@ class _DropdownButton2State<T> extends State<DropdownButton2<T>>
               return buttonHeight != null && _buttonStyle?.width != null
                   ? Align(
                       alignment: widget.alignment,
-                      child: _selectedIndex == null || hintIndex == null
-                          ? null
-                          : item,
+                      child: item,
                     )
                   : IndexedStack(
                       index: _selectedIndex ?? hintIndex,
