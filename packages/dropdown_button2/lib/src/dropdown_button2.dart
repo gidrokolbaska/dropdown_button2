@@ -750,7 +750,7 @@ class _DropdownButton2State<T> extends State<DropdownButton2<T>>
                 widget.valueListenable,
                 widget.multiValueListenable,
               );
-              Widget item = buttonItems[_selectedIndex ?? hintIndex ?? 0];
+              Widget? item = buttonItems[_selectedIndex ?? hintIndex ?? 1];
               if (item is DropdownItem) {
                 item = item.copyWith(alignment: widget.alignment);
               }
@@ -998,7 +998,7 @@ class DropdownButtonFormField2<T> extends FormField<T> {
 
             final bool isEmpty =
                 !showSelectedItem && !isHintOrDisabledHintAvailable();
-            final bool hasError = effectiveDecoration.errorText != null;
+
             // An unFocusable Focus widget so that this widget can detect if its
             // descendants have focus or not.
             return Focus(
@@ -1007,32 +1007,6 @@ class DropdownButtonFormField2<T> extends FormField<T> {
               child: Builder(
                 builder: (BuildContext context) {
                   final bool isFocused = Focus.of(context).hasFocus;
-                  InputBorder? resolveInputBorder() {
-                    if (hasError) {
-                      if (isFocused) {
-                        return effectiveDecoration.focusedErrorBorder;
-                      }
-                      return effectiveDecoration.errorBorder;
-                    }
-                    if (isFocused) {
-                      return effectiveDecoration.focusedBorder;
-                    }
-                    if (effectiveDecoration.enabled) {
-                      return effectiveDecoration.enabledBorder;
-                    }
-                    return effectiveDecoration.border;
-                  }
-
-                  BorderRadius? effectiveBorderRadius() {
-                    final InputBorder? inputBorder = resolveInputBorder();
-                    if (inputBorder is OutlineInputBorder) {
-                      return inputBorder.borderRadius;
-                    }
-                    if (inputBorder is UnderlineInputBorder) {
-                      return inputBorder.borderRadius;
-                    }
-                    return null;
-                  }
 
                   return DropdownButtonHideUnderline(
                     child: DropdownButton2<T>._formField(

@@ -54,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return null;
                 },
                 decoration: InputDecoration(
+                  labelText: 'Label',
                   errorStyle: TextStyle(
                     color: Colors.blue,
                   ),
